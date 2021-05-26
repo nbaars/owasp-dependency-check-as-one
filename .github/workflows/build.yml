@@ -18,8 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Add date to environment"
-        run: |
-          echo "TODAY=$(date +%Y%m%d)" >> $GITHUB_ENV
+        run: echo "TODAY=$(date +%Y%m%d)" >> $GITHUB_ENV
       - name: "Set up QEMU"
         uses: docker/setup-qemu-action@v1.1.0
 
