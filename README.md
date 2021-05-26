@@ -1,5 +1,7 @@
 ## All in one ready to go Docker based image for OWASP DependencyCheck
 
+An all in one Docker image for OWASP DependencyCheck fully initialised with the NIST database of the today. You can use this image directly in your pipeline without having to download initialised the database needed for the CLI to run.
+
 ### Introduction
 
 Running DependencyCheck locally on your own machine works fine, run it once it will download/initialize the cache etc and the next time you run it, it will have the cache ready and it will run pretty fast.
@@ -27,14 +29,18 @@ It is a all in one image, the scanner and database are combined into one you can
 
 ## Usage
 
+TODO: OSS-index
+
 ### Standalone
 
 Use: 
 
 ```
-docker pull nbaars/owasp-dependency-check-scanner-as-one:latest
-docker run nbaars/owasp-dependency-check-scanner-as-one:latest -scan .
+docker pull nbaars/owasp-dependency-check-as-one:latest
+docker run nbaars/owasp-dependency-check-as-one:latest -scan .
 ```
+
+You can pass any command-line option you are used to pass.
 
 ### Gitlab
 
