@@ -19,7 +19,7 @@ This image was created based on a personal itch, setting it up in a pipeline too
 
 ### Updates
 
-The Github actions for this project run every day the images will be tagged by date as follows: `yyyyMMdd` and `latest` will always point to today.
+The Github actions for this project run every day the images will be tagged by date as follows: `yyyyMMdd` and `latest` will always point to today. The repository contains a trigger which will run each day at 0:00 UTC. 
 
 ### Limitations
 

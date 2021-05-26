@@ -34,8 +34,7 @@ jobs:
       - name: "Build and push"
         uses: docker/build-push-action@v2.4.0
         with:
-          context: ./docker
-          file: docker/Dockerfile
+          file: Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
