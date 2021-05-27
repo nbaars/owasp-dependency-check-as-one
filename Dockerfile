@@ -10,6 +10,9 @@ FROM azul/zulu-openjdk-alpine:16.0.1-16.30.15-jre@sha256:86e0257d78a25b91b5b75a6
 
 LABEL org.opencontainers.image.authors="nanneb@gmail.com"
 
+RUN addgroup -S owasp && adduser -S owasp -G owasp
+USER owasp
+
 WORKDIR /dependency-check
 COPY --from=builder /dependency-check/data data
 COPY --from=builder /dependency-check/dependency-check .

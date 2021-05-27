@@ -25,7 +25,9 @@ The Github actions for this project run every day the images will be tagged by d
 
 ### Limitations
 
-It is a all in one image, the scanner and database are combined into one you cannot for example run the Maven plugin for OWASP DependencyCheck with this image. Please note a Maven plugin is on the road map.
+It is a all in one image, the scanner and database are combined into one you cannot for example run the Maven plugin for OWASP DependencyCheck with this image. Please note a Maven plugin is on the road map. 
+
+The OSS Index Analyzer is enabled by default, this one is needed during the reporting phase. It will be cached with the aid of the local Maven repository. You can mount it in the Docker image to take advantage of the caching.
 
 ## Usage
 
