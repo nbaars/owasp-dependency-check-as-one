@@ -14,8 +14,8 @@ RUN addgroup -S owasp && adduser -S owasp -G owasp
 USER owasp
 
 WORKDIR /dependency-check
-COPY --from=builder /dependency-check/data data
-COPY --from=builder /dependency-check/dependency-check .
+COPY --chown=owasp:owasp --from=builder /dependency-check/data data
+COPY --chown=owasp:owasp --from=builder /dependency-check/dependency-check .
 
 ENTRYPOINT ["bin/dependency-check.sh", "--data", "data", "--noupdate"]
 CMD ["--help"]
