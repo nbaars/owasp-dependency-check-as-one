@@ -36,7 +36,7 @@ jobs:
         with:
           file: Dockerfile
           push: true
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
           tags: |
             nbaars/owasp-dependency-check-as-one:${{ env.TODAY }}
             nbaars/owasp-dependency-check-as-one:latest
