@@ -43,8 +43,10 @@ Use:
 ```
 docker pull nbaars/owasp-dependency-check-as-one:latest
 
-docker run -v ${HOME}/.m2:/home/owasp/.m2 -v ${PWD}/demo-project:/dependency-check/demo nbaars/owasp-dependency-check-as-one:latest /dependency-check/demo/mvnw dependency:copy-dependencies && /dependency-check/bin/dependency-check.sh --scan /dependency-check/demo/
+docker run -v ${HOME}/.m2:/home/owasp/.m2 -v ${PWD}/demo-project:/workspace nbaars/owasp-dependency-check-as-one:latest ./mvnw dependency:copy-dependencies && dependency-check --data /data --scan /workspace --noupdate
 ```
+
+Important are the two mount points, the first one mounts the local `.m2` directory, this will prevent DependencyCheck from downloading artifacts over and over. When using a CI tool it is recommended to mount the `.m2` cache. The project to be scanned is mapped in `/workspace` which is the working directory set in the Dockerfile.
 
 You can pass any command-line option you are used to pass.
 
@@ -53,13 +55,22 @@ If your project includes a Maven wrapper you can run:
 ```
 docker pull nbaars/owasp-dependency-check-as-one:latest
 
-docker run -v ${HOME}/.m2/:/home/owasp/.m2 -v ${PWD}/demo-project:/dependency-check/demo nbaars/owasp-dependency-check-as-one:latest /bin/sh -c 'cd /dependency-check/demo/; ./mvnw org.owasp:dependency-check-maven:6.1.6:aggregate -DautoUpdate=false -DdataDirectory=/dependency-check/data'
+docker run -v ${HOME}/.m2/:/home/owasp/.m2 -v ${PWD}/demo-project:/workspace nbaars/owasp-dependency-check-as-one:latest ./mvnw org.owasp:dependency-check-maven:6.1.6:aggregate -DautoUpdate=false -DdataDirectory=/data
 ```
 
 
 ### Gitlab
 
 In your pipeline use the following:
+
+```
+
+```
+
+
+### Github actions
+
+If you want to use this image in Github, use the following:
 
 ```
 
