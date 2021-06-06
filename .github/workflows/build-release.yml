@@ -1,11 +1,5 @@
 name: "Build"
 on:
-  pull_request:
-    paths-ignore:
-      - '.txt'
-      - '*.MD'
-      - '*.md'
-      - 'LICENSE'
   push:
     branches:
       - main

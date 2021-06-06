@@ -11,8 +11,11 @@ FROM azul/zulu-openjdk-alpine:16.0.1-16.30.15-jre@sha256:86e0257d78a25b91b5b75a6
 LABEL org.opencontainers.image.authors="nanneb@gmail.com"
 
 RUN addgroup -S owasp && adduser -S owasp -G owasp
-USER owasp
 
-WORKDIR /dependency-check
-COPY --chown=owasp:owasp --from=builder /dependency-check/data data
-COPY --chown=owasp:owasp --from=builder /dependency-check/dependency-check .
+COPY --chown=owasp:owasp --from=builder /dependency-check/data /data
+COPY --chown=owasp:owasp --from=builder /dependency-check/dependency-check /dependency-check
+
+RUN ln -s /dependency-check/bin/dependency-check.sh /usr/bin/dependency-check
+
+USER owasp
+WORKDIR /workspace

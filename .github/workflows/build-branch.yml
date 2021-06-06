@@ -1,0 +1,39 @@
+name: "Build branch (no push to DockerHub)"
+on:
+  pull_request:
+    paths-ignore:
+      - '.txt'
+      - '*.MD'
+      - '*.md'
+      - 'LICENSE'
+
+jobs:
+  build:
+    name: Build and test Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # Required to mount the Github Workspace to a volume
+      - name: Check
+        run: |
+          id
+          ls -al
+      - name: "Set up Docker Buildx"
+        uses: docker/setup-buildx-action@v1
+        with:
+          driver: docker
+
+      - name: "Build"
+        uses: docker/build-push-action@v2.4.0
+        with:
+          file: Dockerfile
+          push: false
+          platforms: linux/amd64
+          tags: test-image:latest
+      - name: "Test"
+        uses: addnab/docker-run-action@v3
+        with:
+          image: test-image:latest
+          options: "--user root -v ${{ github.workspace }}/demo-project:/workspace:rw"
+          run: |
+            ./test.sh
