@@ -1,6 +1,6 @@
 ## All in one ready to go Docker based image for OWASP DependencyCheck
 
-An all in one Docker image for OWASP DependencyCheck fully initialised with the NIST database of the today. You can use this image directly in your pipeline without having to download initialised the database needed for the CLI to run.
+An all in one Docker image for OWASP DependencyCheck fully initialised with the NIST database of the day. You can use this image directly in your pipeline without having to download and wait for an initialised database.
 
 ### Introduction
 
@@ -18,9 +18,9 @@ This image was created based on a personal itch, setting it up in a pipeline too
 
 - Easy to use
 - Every day there is a new image waiting to be used in your CI environment
-- Scanner runs offline
-- Fast
-- No need to setup a database with persistent storage etc to hold the configuration
+- Scanner runs offline (database is contained in the image)
+- Fast (no need to wait to download the CVEs)
+- No need to setup a database with persistent storage etc to hold the configuration.
 - No need to configure a central database as described [here](https://jeremylong.github.io/DependencyCheck/data/database.html).
 
 ### Updates
@@ -30,9 +30,7 @@ So make sure you are fine with running OWASP dependency check with a 1 day old d
 
 ### Limitations
 
-It is a all in one image, the scanner and database are combined into one you cannot for example run the Maven plugin for OWASP DependencyCheck with this image.
-
-The OSS Index Analyzer is enabled by default, this one is needed during the reporting phase. It will be cached with the aid of the local Maven repository. You can mount it in the Docker image to take advantage of the caching. If you only need the output of the analysis job you can pass `disableOssIndex` while running the analyzer.
+The image is at most 1 day old, if you need to update more often you cannot use this image. Make sure to discuss this up front with your security team.
 
 ## Usage
 
@@ -46,7 +44,7 @@ docker pull nbaars/owasp-dependency-check-as-one:latest
 docker run -v ${HOME}/.m2:/home/owasp/.m2 -v ${PWD}/demo-project:/workspace nbaars/owasp-dependency-check-as-one:latest ./mvnw dependency:copy-dependencies && dependency-check --data /data --scan /workspace --noupdate
 ```
 
-Important are the two mount points, the first one mounts the local `.m2` directory, this will prevent DependencyCheck from downloading artifacts over and over. When using a CI tool it is recommended to mount the `.m2` cache. The project to be scanned is mapped in `/workspace` which is the working directory set in the Dockerfile.
+Important are the two mount points, the first one mounts the local `.m2` directory, this will prevent DependencyCheck from downloading Maven artifacts over and over. When using a CI tool it is recommended to mount the `.m2` cache. The project to be scanned is mapped in `/workspace` which is the working directory set in the Dockerfile.
 
 You can pass any command-line option you are used to pass.
 
@@ -61,11 +59,7 @@ docker run -v ${HOME}/.m2/:/home/owasp/.m2 -v ${PWD}/demo-project:/workspace nba
 
 ### Gitlab
 
-In your pipeline use the following:
-
-```
-
-```
+TBD
 
 
 ### Github actions
