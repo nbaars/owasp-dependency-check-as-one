@@ -11,6 +11,8 @@ jobs:
     name: Build and push Docker image
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # Required to mount the Github Workspace to a volume
       - name: "Add date to environment"
         run: echo "TODAY=$(date +%Y%m%d)" >> $GITHUB_ENV
       - name: "Set up QEMU"
@@ -24,15 +26,25 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: "Build and push"
+      - name: "Build test image"
         uses: docker/build-push-action@v2.4.0
         with:
           file: Dockerfile
-          push: true
+          push: false
           platforms: linux/amd64
-          tags: |
-            nbaars/owasp-dependency-check-as-one:${{ env.TODAY }}
-            nbaars/owasp-dependency-check-as-one:latest
+          tags: test-image:latest
+      - name: "Run tests"
+        uses: addnab/docker-run-action@v3
+        with:
+          image: test-image:latest
+          options: "--user root -v ${{ github.workspace }}/demo-project:/workspace:rw"
+          run: |
+            ./test.sh
+      - name: "Push images"
+        run: >
+          docker tag test-image:latest nbaars/owasp-dependency-check-as-one:${{ env.TODAY }}
+          docker tag test-image:latest nbaars/owasp-dependency-check-as-one:latest
+          docker push nbaars/owasp-dependency-check-as-one:${{ env.TODAY }}
+          docker push nbaars/owasp-dependency-check-as-one:latest
       - name: "Image digest"
         run: echo ${{ steps.docker_build.outputs.digest }}
