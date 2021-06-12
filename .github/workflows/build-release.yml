@@ -17,15 +17,10 @@ jobs:
         run: echo "TODAY=$(date +%Y%m%d)" >> $GITHUB_ENV
       - name: "Set up QEMU"
         uses: docker/setup-qemu-action@v1.1.0
-
       - name: "Set up Docker Buildx"
         uses: docker/setup-buildx-action@v1
-
-      - name: "Login to dockerhub"
-        uses: docker/login-action@v1.9.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          driver: docker
       - name: "Build test image"
         uses: docker/build-push-action@v2.4.0
         with:
@@ -40,6 +35,11 @@ jobs:
           options: "--user root -v ${{ github.workspace }}/demo-project:/workspace:rw"
           run: |
             ./test.sh
+      - name: "Login to dockerhub"
+        uses: docker/login-action@v1.9.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: "Push images"
         run: >
           docker tag test-image:latest nbaars/owasp-dependency-check-as-one:${{ env.TODAY }}
