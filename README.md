@@ -18,6 +18,7 @@ This image was created based on a personal itch, setting it up in a pipeline too
 
 - Easy to use
 - Every day there is a new image waiting to be used in your CI environment
+- No need to mount the directory which contains a copy of the database to run the Docker image it is all available in the image  
 - Scanner runs offline (database is contained in the image)
 - Fast (no need to wait to download the CVEs)
 - No need to set up a database with persistent storage etc to hold the configuration.
