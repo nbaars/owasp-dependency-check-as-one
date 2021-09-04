@@ -60,8 +60,44 @@ docker run -v ${HOME}/.m2/:/home/owasp/.m2 -v ${PWD}/demo-project:/workspace nba
 
 ### Gitlab
 
-TBD
+In your `.gitlab-ci.yml` add the following job:
 
+```
+OWASP dep check:
+  image: nbaars/owasp-dependency-check-as-one
+  stage: build
+  script:
+    # Download all dependencies so they are available for OWASP Dependency-Check
+    - ./mvnw $MAVEN_CLI_OPTS dependency:copy-dependencies
+    # Run the CLI and pass the current directory (automatically checked out by the Gitlab pipeline) as project to scan
+    # Other options can be passed depending on your project setup (https://jeremylong.github.io/DependencyCheck/dependency-check-cli/arguments.html)
+    - dependency-check --data /data --scan ./ --noupdate --disableBundleAudit --disableRubygems --failOnCVSS 8
+  artifacts:
+    when: always
+    paths:
+      # Make the project available as artifact so you can view it
+      - "dependency-check-report.html"
+    expire_in: 1 week
+```
+
+Or with Maven:
+
+```shell
+OWASP maven:
+  image: nbaars/owasp-dependency-check-as-one
+  stage: build
+  script:
+    # Run dependency-check with Maven, other options can be passed see https://jeremylong.github.io/DependencyCheck/dependency-check-maven/configuration.html
+    - ./mvnw $MAVEN_CLI_OPTS org.owasp:dependency-check-maven:6.1.6:aggregate -Dformat=ALL -DautoUpdate=false -DdataDirectory=/data -DfailBuildOnAnyVulnerability=true -DbundleAuditAnalyzerEnabled=false
+  artifacts:
+    when: always
+    paths:
+      # Make the project available as artifact so you can view it
+      - "target/dependency-check-report.html"
+    expire_in: 1 week
+```
+
+An example can be found [here](https://gitlab.com/nbaars/petstore)
 
 ### Github actions
 
