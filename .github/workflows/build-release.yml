@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2 # Required to mount the Github Workspace to a volume
+        uses: actions/checkout@v3.0.2 # Required to mount the Github Workspace to a volume
       - name: "Add date to environment"
         run: echo "TODAY=$(date +%Y%m%d)" >> $GITHUB_ENV
       - name: "Set up QEMU"
